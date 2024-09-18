@@ -1,3 +1,8 @@
+/*
+* Neste arquivo criamos uma espécie de schema padrão para o nosso
+* arquivo. Lembre-se que o mongo não usa schema, mas é útil você
+* padronizar pelo menos uma parte dele.
+*/
 const mongoose = require('mongoose');
 const uniqueValidator = require('mongoose-unique-validator');
 

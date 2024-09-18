@@ -1,13 +1,19 @@
+/*
+* O controller é o maestro do sistema. Ele faz todas as
+* operações necessárias para o sistema trabalhar.
+* Neste controller específico ele faz as operações de Usuários.
+*/
+
 const bcrypt = require('bcryptjs');
 const mongoose = require('mongoose');
 
 const Usuario = require('../models/usuario');
 
 exports.create = (req, res, next) => {
-    const email = req.body.email;
+    const email = req.body.email; // recebe os dados do cliente
     const senha = req.body.senha;
 
-    if(email === undefined || senha === undefined)
+    if(email === undefined || senha === undefined) // verifica se vieram certinho
     {
         res.status(400).json({
             mensagem: 'Campos não definidos'
@@ -15,8 +21,9 @@ exports.create = (req, res, next) => {
     }
     else
     {
-        const senhaCriptografada = bcrypt.hashSync(senha, 10);
+        const senhaCriptografada = bcrypt.hashSync(senha, 10); // Criptografa a senha
 
+        // Verifica se o usuário já existe
         Usuario.findOne({
             email: email
         }).then(usuario => {
@@ -29,6 +36,8 @@ exports.create = (req, res, next) => {
                 });
 
                 novoUsuario.save().then(usuarioCriado => {
+                    // Devolve ao usuário os dados cadastrados
+                    // Note que a senha não.
                     res.status(201).json({
                         mensagem: 'Usuario criado',
                         usuario: {
@@ -125,7 +134,7 @@ exports.delete = (req, res, next) => {
 }
 
 exports.getOne = (req, res, next) => {
-    const id = req.params.id;
+    const id = req.params.id; // no caso do get os dados vêm via URL, portando muda a maneira de pegar a informação
 
     if(id === undefined)
     {
