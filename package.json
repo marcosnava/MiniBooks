@@ -1,0 +1,16 @@
+{
+  "name": "minibooks",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "start": "nodemon ./bin/www"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "debug": "~2.6.9",
+    "express": "^4.21.0",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.6.2",
+    "mongoose-unique-validator": "^5.0.1"
+  }
+}
