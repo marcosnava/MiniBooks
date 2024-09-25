@@ -7,11 +7,13 @@
 const express = require('express');
 const router = express.Router();
 const usuarioController = require('../controllers/usuarioController');
+const checkAuth = require('../middleware/checkAuth');
 
+router.post('/login', usuarioController.login);
 router.post('/', usuarioController.create);
-router.patch('/', usuarioController.update);
-router.delete('/', usuarioController.delete);
-router.get('/:id', usuarioController.getOne);
-router.get('/', usuarioController.getAll);
+router.patch('/', checkAuth, usuarioController.update);
+router.delete('/', checkAuth, usuarioController.delete);
+router.get('/:id', checkAuth, usuarioController.getOne);
+router.get('/', checkAuth, usuarioController.getAll);
 
 module.exports = router;

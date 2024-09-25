@@ -6,8 +6,10 @@
 
 const bcrypt = require('bcryptjs');
 const mongoose = require('mongoose');
+const jwt = require('jsonwebtoken');
 
 const Usuario = require('../models/usuario');
+const utils = require('../utils/utils');
 
 exports.create = (req, res, next) => {
     const email = req.body.email; // recebe os dados do cliente
@@ -183,4 +185,69 @@ exports.getAll = (req, res, next) => {
     })
 }
 
-exports.login = (req, res, next) => {}
+exports.login = (req, res, next) => {
+    const JWT_KEY = utils.JWT_KEY;
+
+    const email = req.body.email;
+    const senha = req.body.senha;
+
+    let erro = false;
+    let usuarioEncontrado;
+
+    if(email === undefined || senha === undefined)
+    {
+        res.status(401).json({
+            mensagem: 'Credenciais inválidas'
+        });
+    }
+    else
+    {
+        Usuario.findOne({
+            email: email
+        }).then(usuario => {
+            if(!usuario)
+            {
+                erro = true;
+                return res.status(401).json({
+                    mensagem: 'Credenciais inválidas.'
+                });
+            }
+            else
+            {
+                usuarioEncontrado = usuario;
+                return bcrypt.compare(senha, usuario.senha);
+            }
+        }).then(resultado => {
+            if(!erro)
+            {
+                // Achei o usuário
+                if(!resultado)
+                {
+                    // senha errada
+                    return res.status(401).json({
+                        mensagem: 'Crendenciais inválidas'
+                    });
+                }
+                // tudo certo
+                const token = jwt.sign({
+                    email: usuarioEncontrado.email
+                },
+                JWT_KEY,
+                {
+                    expiresIn: '1h'
+                }
+                );
+                res.status(200).json({
+                    token: token,
+                    expiresIn: '3600',
+                    usuarioId: usuarioEncontrado._id
+                });
+            }
+        }).catch(err => {
+            console.log(err);
+            res.status(500).json({
+                mensagem: 'Erro no login'
+            })
+        });
+    }
+}
