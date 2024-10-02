@@ -16,7 +16,7 @@ const app = express();
 // Importar as rotas - Rotas são endereços que ligam a API ao
 // usuário.
 const usuarioRoutes = require('./routes/usuarioRoutes');
-const usuario = require('./models/usuario');
+const publicacaoRoutes = require('./routes/publicacaoRoutes');
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -47,5 +47,6 @@ app.use((req, res, next) => {
 
 // Implantação das rotas
 app.use('/usuarios', usuarioRoutes);
+app.use('/publicacoes', publicacaoRoutes);
 
 module.exports = app;

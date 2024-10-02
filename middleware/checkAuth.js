@@ -7,7 +7,7 @@ module.exports = (req, res, next) => {
     try {
         const token = req.headers.authorization;
         const decodedToken = jwt.verify(token, JWT_KEY);
-        req.userData = { email: decodedToken.email };
+        req.userData = { id: decodedToken.id };
         next();
     }
     catch(error)

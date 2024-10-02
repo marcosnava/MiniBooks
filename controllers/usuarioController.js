@@ -230,6 +230,7 @@ exports.login = (req, res, next) => {
                 }
                 // tudo certo
                 const token = jwt.sign({
+                    id: usuarioEncontrado._id,
                     email: usuarioEncontrado.email
                 },
                 JWT_KEY,
